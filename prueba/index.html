@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Prueba privada de la asistente de KHIYA.">
+<title>Prueba KHIYA</title>
+<link rel="icon" href="https://nachojr2003.github.io/khiya-site/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;600;700&display=swap">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --surface: #F3ECE2;
+    --text: #272622;
+    --muted: #615F57;
+    --line: rgba(39, 38, 34, .16);
+    --line-strong: rgba(39, 38, 34, .42);
+    --btn-bg: #272622;
+    --btn-text: #F3ECE2;
+    --focus: #272622;
+    --logo-filter: none;
+    --gutter: 16px;
+    --font: Mulish, system-ui, -apple-system, "Segoe UI", sans-serif, "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji";
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1B1A17;
+      --surface: #262520;
+      --text: #F3ECE2;
+      --muted: #B0ACA0;
+      --line: rgba(243, 236, 226, .18);
+      --line-strong: rgba(243, 236, 226, .45);
+      --btn-bg: #F3ECE2;
+      --btn-text: #272622;
+      --focus: #F3ECE2;
+      --logo-filter: invert(1);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1B1A17;
+    --surface: #262520;
+    --text: #F3ECE2;
+    --muted: #B0ACA0;
+    --line: rgba(243, 236, 226, .18);
+    --line-strong: rgba(243, 236, 226, .45);
+    --btn-bg: #F3ECE2;
+    --btn-text: #272622;
+    --focus: #F3ECE2;
+    --logo-filter: invert(1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    /* Espacio para que el lanzador del chat (esquina inferior) no tape el pie. */
+    padding-bottom: 96px;
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+
+  a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:hover { text-decoration-thickness: 2px; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+  .wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 var(--gutter); }
+  /* La columna de lectura deja libre la esquina derecha, donde vive el chat. */
+  main { max-width: 640px; }
+  @media (min-width: 1024px) {
+    .wrap { padding: 0 32px; }
+    main { max-width: min(640px, calc(100% - 420px)); }
+  }
+
+  /* ---------- Cabecera ---------- */
+  .top { padding: 28px 0 0; }
+  .top img { display: block; width: 143px; height: 45px; filter: var(--logo-filter); }
+
+  .eyebrow {
+    margin: 0 0 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1, h2, h3 { margin: 0; font-weight: 300; letter-spacing: -.01em; line-height: 1.15; }
+  h1 { font-size: clamp(2.1rem, 7.4vw, 3.5rem); }
+  h2 { font-size: clamp(1.55rem, 4.6vw, 2.1rem); }
+  h3 { font-size: 1.12rem; font-weight: 600; letter-spacing: 0; line-height: 1.35; }
+  p { margin: 0; }
+
+  .hero { padding: 56px 0 8px; }
+  .hero .lede { margin-top: 22px; max-width: 34em; font-size: 1.1rem; color: var(--text); }
+  .hero .actions { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center; }
+  .hero .nota { margin-top: 18px; font-size: .92rem; color: var(--muted); }
+
+  .btn {
+    appearance: none; border: 0; cursor: pointer;
+    font: inherit; font-weight: 600; letter-spacing: .02em;
+    min-height: 48px; padding: 0 26px;
+    background: var(--btn-bg); color: var(--btn-text);
+    border-radius: 2px;
+    transition: opacity .15s ease;
+  }
+  .btn:hover { opacity: .88; }
+  .link-suave { font-weight: 600; font-size: .98rem; }
+
+  section { padding-top: 64px; }
+  section > h2 + p { margin-top: 12px; color: var(--muted); max-width: 36em; }
+
+  /* ---------- Qué es esto ---------- */
+  .card {
+    margin-top: 24px;
+    background: var(--surface);
+    border-radius: 2px;
+    padding: 24px 22px;
+  }
+  .card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+  .card li { padding-left: 18px; position: relative; }
+  .card li::before {
+    content: ""; position: absolute; left: 0; top: .78em;
+    width: 8px; height: 1px; background: var(--text);
+  }
+  .card .pie { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); font-size: .92rem; color: var(--muted); }
+
+  /* ---------- Qué probar ---------- */
+  .probar { margin: 26px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+  .caso { padding: 22px 0 24px; border-bottom: 1px solid var(--line); }
+  .caso .mira { margin-top: 4px; font-size: .94rem; color: var(--muted); }
+  .frases { margin-top: 14px; display: grid; gap: 10px; }
+  .frase { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border: 1px solid var(--line-strong); border-radius: 2px; }
+  .frase button {
+    appearance: none; background: transparent; color: inherit; border: 0; cursor: pointer;
+    font: inherit; text-align: left;
+  }
+  .frase .enviar { padding: 11px 14px; line-height: 1.45; min-height: 46px; }
+  .frase .enviar:hover { background: var(--surface); }
+  .frase .copiar {
+    padding: 0 14px; min-width: 84px; font-size: .86rem; font-weight: 600; letter-spacing: .02em;
+    border-left: 1px solid var(--line); color: var(--muted); text-align: center;
+  }
+  .frase .copiar:hover { background: var(--surface); color: var(--text); }
+  .frase .copiar[data-hecho="1"] { color: var(--text); }
+
+  /* ---------- Etiqueta del pedido de prueba ---------- */
+  .etiqueta {
+    margin-top: 26px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    padding: 26px 22px 22px;
+    position: relative;
+  }
+  /* El hilván: una costura punteada por dentro del borde, como en una etiqueta de prenda. */
+  .etiqueta::before {
+    content: ""; position: absolute; inset: 7px; pointer-events: none;
+    border: 1px dashed var(--line-strong); border-radius: 1px;
+  }
+  .etiqueta header { position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line-strong); }
+  .etiqueta header span { font-size: 11.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+  .etiqueta header span + span { color: var(--muted); }
+  .etiqueta dl { position: relative; margin: 0; }
+  .etiqueta .fila { display: grid; gap: 4px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .etiqueta .fila:last-child { border-bottom: 0; padding-bottom: 2px; }
+  .etiqueta dt { font-size: 11.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  .etiqueta dd { margin: 0; }
+  @media (min-width: 640px) {
+    .etiqueta { padding: 28px 30px 24px; }
+    .etiqueta .fila { grid-template-columns: 150px 1fr; gap: 18px; }
+  }
+  .kbd { font-weight: 600; white-space: nowrap; }
+  .intro-pedido { margin-top: 12px; max-width: 36em; }
+
+  /* ---------- Cuéntanos ---------- */
+  .preguntas { margin: 22px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+  .preguntas li { padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 1.06rem; }
+  .contacto { margin-top: 22px; max-width: 36em; }
+
+  /* ---------- Pie ---------- */
+  footer { margin-top: 72px; padding: 22px 0 8px; border-top: 1px solid var(--line); font-size: .88rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--text); }
+
+  /* El chat siempre se pinta claro (no tiene modo oscuro). Sin esto, el color-scheme de la página
+     le daba al cuadro de texto un fondo oscuro y el texto escrito (#111) no se leía. */
+  .ijv-root, .ijv-launcher { color-scheme: light; }
+
+  /* Aviso corto (copiado, chat ocupado). Arriba a la izquierda: el chat y su lanzador viven a la derecha y abajo. */
+  #aviso {
+    position: fixed; left: var(--gutter); top: 14px; z-index: 2147483100;
+    max-width: min(420px, calc(100vw - 2 * var(--gutter)));
+    background: var(--btn-bg); color: var(--btn-text);
+    padding: 10px 16px; border-radius: 2px; font-size: .92rem;
+    opacity: 0; transform: translateY(-6px); pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  #aviso.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <img src="https://nachojr2003.github.io/khiya-site/logo.png" width="143" height="45" alt="KHIYA">
+  </div>
+
+  <main id="inicio">
+
+    <!-- (a) Cabecera -->
+    <div class="hero">
+      <p class="eyebrow">Prueba privada</p>
+      <h1>Conversa con la asistente de KHIYA</h1>
+      <p class="lede">Escríbele como lo haría una clienta. Es la misma asistente que atenderá a tus clientas, conectada a Rantia: lo que ves aquí es lo que ellas verán.</p>
+      <div class="actions">
+        <button type="button" class="btn" id="abrir-chat">Abrir el chat</button>
+        <a class="link-suave" href="#que-probar">Ver qué probar</a>
+      </div>
+      <p class="nota">No necesitas instalar nada ni crear una cuenta.</p>
+    </div>
+
+    <!-- (b) Qué es esto -->
+    <section id="que-es" aria-labelledby="t-que-es">
+      <h2 id="t-que-es">Qué es esto</h2>
+      <div class="card">
+        <ul>
+          <li>Es la asistente real de KHIYA, no una maqueta. Consulta el stock verdadero en Rantia y, si llegas al final de un pedido, lo registra de verdad.</li>
+          <li>Es una prueba privada. Todavía no está en WhatsApp ni en Instagram: esas conexiones las hacemos al final, cuando estés conforme con lo que veas aquí.</li>
+          <li>Escribe sin cuidado, como escribiría una clienta: con dudas, con faltas, cambiando de opinión.</li>
+        </ul>
+        <p class="pie">Cada conversación admite hasta 30 turnos. Para empezar de cero, usa el botón ⟳ en la parte superior del chat.</p>
+      </div>
+    </section>
+
+    <!-- (c) Qué probar -->
+    <section id="que-probar" aria-labelledby="t-probar">
+      <h2 id="t-probar">Qué probar</h2>
+      <p>Toca una frase para enviarla al chat, o cópiala y cámbiala a tu manera. No tienes que seguir el orden.</p>
+
+      <ul class="probar">
+        <li class="caso">
+          <h3>Modelos y precios</h3>
+          <p class="mira">Fíjate en: All Day y Essential Classic en S/ 89, High Fit en S/ 99.</p>
+          <div class="frases">
+            <div class="frase"><button type="button" class="enviar" data-frase="¿Qué modelos tienen y cuánto cuestan?">¿Qué modelos tienen y cuánto cuestan?</button><button type="button" class="copiar" aria-label="Copiar la frase: ¿Qué modelos tienen y cuánto cuestan?">Copiar</button></div>
+            <div class="frase"><button type="button" class="enviar" data-frase="¿Cuánto cuesta el High Fit?">¿Cuánto cuesta el High Fit?</button><button type="button" class="copiar" aria-label="Copiar la frase: ¿Cuánto cuesta el High Fit?">Copiar</button></div>
+          </div>
+        </li>
+
+        <li class="caso">
+          <h3>Tu talla según las medidas</h3>
+          <p class="mira">Fíjate en: que las medidas sean las de tu tabla (son de la prenda extendida) y que no te asigne una talla por tu peso.</p>
+          <div class="frases">
+            <div class="frase"><button type="button" class="enviar" data-frase="¿Qué talla me queda en el Essential Classic? ¿Me pasas las medidas?">¿Qué talla me queda en el Essential Classic? ¿Me pasas las medidas?</button><button type="button" class="copiar" aria-label="Copiar la frase sobre la talla del Essential Classic">Copiar</button></div>
+          </div>
+        </li>
+
+        <li class="caso">
+          <h3>La foto de un modelo y color</h3>
+          <p class="mira">Fíjate en: hoy la asistente no envía fotos por el chat y te dirige a khiyaoficial.com. Cuéntanos si prefieres que las envíe.</p>
+          <div class="frases">
+            <div class="frase"><button type="button" class="enviar" data-frase="¿Me muestras una foto del High Fit en beige?">¿Me muestras una foto del High Fit en beige?</button><button type="button" class="copiar" aria-label="Copiar la frase: ¿Me muestras una foto del High Fit en beige?">Copiar</button></div>
+          </div>
+        </li>
+
+        <li class="caso">
+          <h3>Un pedido de 1 prenda a Lima</h3>
+          <p class="mira">Fíjate en: que te pida los datos de uno en uno y que el resumen muestre el envío de S/ 12 para Lima Metropolitana y Callao. El pedido solo se registra si respondes «sí» al resumen.</p>
+          <div class="frases">
+            <div class="frase"><button type="button" class="enviar" data-frase="Quiero un Essential Classic negro, talla M, para Miraflores">Quiero un Essential Classic negro, talla M, para Miraflores</button><button type="button" class="copiar" aria-label="Copiar la frase del pedido de una prenda">Copiar</button></div>
+          </div>
+        </li>
+
+        <li class="caso">
+          <h3>Un pedido de 2 prendas</h3>
+          <p class="mira">Fíjate en: que el envío salga sin costo desde dos prendas.</p>
+          <div class="frases">
+            <div class="frase"><button type="button" class="enviar" data-frase="Quiero un Essential Classic negro talla M y un High Fit beige talla M">Quiero un Essential Classic negro talla M y un High Fit beige talla M</button><button type="button" class="copiar" aria-label="Copiar la frase del pedido de dos prendas">Copiar</button></div>
+          </div>
+        </li>
+
+        <li class="caso">
+          <h3>Un envío a provincia</h3>
+          <p class="mira">Fíjate en: S/ 17 con una prenda y de 2 a 4 días hábiles, contados desde que el pedido sale del taller.</p>
+          <div class="frases">
+            <div class="frase"><button type="button" class="enviar" data-frase="¿Cuánto cuesta y cuánto demora el envío a Arequipa?">¿Cuánto cuesta y cuánto demora el envío a Arequipa?</button><button type="button" class="copiar" aria-label="Copiar la frase sobre el envío a Arequipa">Copiar</button></div>
+          </div>
+        </li>
+
+        <li class="caso">
+          <h3>Pagar con Mercado Pago o por Yape</h3>
+          <p class="mira">Fíjate en: que hable del link de pago y de la página de pago del pedido, y que no dicte números de cuenta por el chat.</p>
+          <div class="frases">
+            <div class="frase"><button type="button" class="enviar" data-frase="¿Puedo pagar con Yape?">¿Puedo pagar con Yape?</button><button type="button" class="copiar" aria-label="Copiar la frase: ¿Puedo pagar con Yape?">Copiar</button></div>
+            <div class="frase"><button type="button" class="enviar" data-frase="¿Cómo pago mi pedido?">¿Cómo pago mi pedido?</button><button type="button" class="copiar" aria-label="Copiar la frase: ¿Cómo pago mi pedido?">Copiar</button></div>
+          </div>
+        </li>
+
+        <li class="caso">
+          <h3>Cambios y devoluciones</h3>
+          <p class="mira">Fíjate en: 7 días desde que recibes el pedido, con la prenda sin uso, sin lavar y con su etiqueta.</p>
+          <div class="frases">
+            <div class="frase"><button type="button" class="enviar" data-frase="¿Puedo cambiar mi polo si no me queda?">¿Puedo cambiar mi polo si no me queda?</button><button type="button" class="copiar" aria-label="Copiar la frase: ¿Puedo cambiar mi polo si no me queda?">Copiar</button></div>
+          </div>
+        </li>
+
+        <li class="caso">
+          <h3>Lo que KHIYA no hace</h3>
+          <p class="mira">Fíjate en: que lo diga con claridad y con calma, sin prometer lo que no existe.</p>
+          <div class="frases">
+            <div class="frase"><button type="button" class="enviar" data-frase="¿Tienen ponchos?">¿Tienen ponchos?</button><button type="button" class="copiar" aria-label="Copiar la frase: ¿Tienen ponchos?">Copiar</button></div>
+            <div class="frase"><button type="button" class="enviar" data-frase="¿Tienen ropa para hombre?">¿Tienen ropa para hombre?</button><button type="button" class="copiar" aria-label="Copiar la frase: ¿Tienen ropa para hombre?">Copiar</button></div>
+          </div>
+        </li>
+
+        <li class="caso">
+          <h3>Un reclamo y pedir hablar con una persona</h3>
+          <p class="mira">Fíjate en: que en la web te dé el WhatsApp +51 902 368 920 o el correo khiyaoficial@gmail.com, porque aquí nadie del equipo lee el chat.</p>
+          <div class="frases">
+            <div class="frase"><button type="button" class="enviar" data-frase="Mi polo llegó con un defecto">Mi polo llegó con un defecto</button><button type="button" class="copiar" aria-label="Copiar la frase: Mi polo llegó con un defecto">Copiar</button></div>
+            <div class="frase"><button type="button" class="enviar" data-frase="Quiero hablar con una persona">Quiero hablar con una persona</button><button type="button" class="copiar" aria-label="Copiar la frase: Quiero hablar con una persona">Copiar</button></div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- (d) Pedido de prueba -->
+    <section id="pedido-de-prueba" aria-labelledby="t-pedido">
+      <h2 id="t-pedido">Si haces un pedido de prueba</h2>
+      <p class="intro-pedido">Si llegas hasta el final, el pedido se crea de verdad en Rantia, con un link de pago real de Mercado Pago. No hace falta pagarlo. Para reconocerlo después, usa «Prueba» como apellido.</p>
+
+      <div class="etiqueta">
+        <header><span>Pedido de prueba</span><span>Se puede cancelar</span></header>
+        <dl>
+          <div class="fila">
+            <dt>Se crea cuando</dt>
+            <dd>Respondes «sí» al resumen de la asistente. Hasta ahí, no se registra nada.</dd>
+          </div>
+          <div class="fila">
+            <dt>Dónde verlo</dt>
+            <dd>En Rantia, menú <span class="kbd">Pedidos</span>. Entra con tu usuario en <a href="https://rantia.vercel.app" target="_blank" rel="noopener">rantia.vercel.app</a>.</dd>
+          </div>
+          <div class="fila">
+            <dt>Cómo cancelarlo</dt>
+            <dd>Abre el pedido, pulsa <span class="kbd">Cancelar pedido</span>, escribe un motivo (por ejemplo, «Pedido de prueba») y vuelve a pulsar <span class="kbd">Cancelar pedido</span>. El link de Mercado Pago queda desactivado y las prendas apartadas vuelven a estar disponibles.</dd>
+          </div>
+          <div class="fila">
+            <dt>El pago</dt>
+            <dd>No hace falta pagarlo. Si lo pagas sin querer, avísanos.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- (e) Cuéntanos -->
+    <section id="cuentanos" aria-labelledby="t-cuentanos">
+      <h2 id="t-cuentanos">Cuéntanos</h2>
+      <p>Después de probar, tres preguntas nos ayudan a afinar a la asistente.</p>
+      <ul class="preguntas">
+        <li>¿Suena a KHIYA?</li>
+        <li>¿Algún dato está mal: precios, medidas, envío, datos de Yape o del BCP?</li>
+        <li>¿Qué falta?</li>
+      </ul>
+      <p class="contacto">Respóndenos en el grupo de WhatsApp o escríbenos a <a href="mailto:javier.vergara@ijvagency.com?subject=Prueba%20KHIYA">javier.vergara@ijvagency.com</a>.</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <a href="https://nachojr2003.github.io/khiya-site/politica-privacidad.html" target="_blank" rel="noopener">Política de privacidad</a>
+    <a href="https://ijvagency.com/" target="_blank" rel="noopener">Powered by IJV</a>
+  </footer>
+</div>
+
+<div id="aviso" role="status" aria-live="polite"></div>
+
+<!-- (f) Widget del chat. La configuración va ANTES del script: el widget trae sus defaults
+     y esto solo los sobrescribe. privacyUrl va absoluta: la relativa del widget apuntaría
+     fuera de /khiya-site/ en GitHub Pages. -->
+<script>
+window.khiyaAgentConfig = {
+  n8nBase: 'https://meta.ijvagency.com',
+  webhook: 'https://meta.ijvagency.com/webhook/khiya-agent',
+  privacyUrl: 'https://nachojr2003.github.io/khiya-site/politica-privacidad.html'
+};
+</script>
+<script src="https://nachojr2003.github.io/khiya-site/widget/agent.js" defer></script>
+
+<script>
+(function () {
+  'use strict';
+  var aviso = document.getElementById('aviso');
+  var avisoTimer = null;
+
+  function decir(texto) {
+    aviso.textContent = texto;
+    aviso.classList.add('visible');
+    clearTimeout(avisoTimer);
+    avisoTimer = setTimeout(function () { aviso.classList.remove('visible'); }, 2600);
+  }
+
+  function chatListo() {
+    if (window.khiyaAgent && typeof window.khiyaAgent.open === 'function') return true;
+    decir('El chat todavía no carga. Espera un momento o recarga la página.');
+    return false;
+  }
+
+  function abrirChat() {
+    if (!chatListo()) return;
+    window.khiyaAgent.open();
+  }
+
+  function enviarAlChat(texto) {
+    if (!chatListo()) return;
+    if (document.querySelector('.ijv-typing')) {
+      decir('La asistente todavía está respondiendo. Espera un momento.');
+      return;
+    }
+    window.khiyaAgent.open();
+    /* Pequeña espera: en la primera apertura el chat arma su bienvenida antes de recibir el mensaje. */
+    setTimeout(function () { window.khiyaAgent.send(texto); }, 350);
+  }
+
+  /* Copia "a la antigua": sirve cuando el navegador niega el portapapeles moderno
+     (pasa en algunos celulares y en páginas dentro de otro marco). */
+  function copiaManual(texto) {
+    return new Promise(function (ok, fallo) {
+      try {
+        var t = document.createElement('textarea');
+        t.value = texto;
+        t.setAttribute('readonly', '');
+        t.style.position = 'fixed';
+        t.style.opacity = '0';
+        document.body.appendChild(t);
+        t.select();
+        t.setSelectionRange(0, texto.length);
+        var hecho = document.execCommand('copy');
+        document.body.removeChild(t);
+        hecho ? ok() : fallo(new Error('copy'));
+      } catch (e) { fallo(e); }
+    });
+  }
+
+  function copiarTexto(texto) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(texto).catch(function () { return copiaManual(texto); });
+    }
+    return copiaManual(texto);
+  }
+
+  document.getElementById('abrir-chat').addEventListener('click', abrirChat);
+
+  Array.prototype.forEach.call(document.querySelectorAll('.frase'), function (fila) {
+    var enviar = fila.querySelector('.enviar');
+    var copiar = fila.querySelector('.copiar');
+    var frase = enviar.getAttribute('data-frase');
+    enviar.setAttribute('aria-label', 'Enviar al chat: ' + frase);
+
+    enviar.addEventListener('click', function () { enviarAlChat(frase); });
+
+    copiar.addEventListener('click', function () {
+      copiarTexto(frase).then(function () {
+        copiar.textContent = 'Copiado';
+        copiar.setAttribute('data-hecho', '1');
+        decir('Frase copiada.');
+        setTimeout(function () { copiar.textContent = 'Copiar'; copiar.removeAttribute('data-hecho'); }, 1800);
+      }).catch(function () {
+        decir('Tu navegador no dejó copiar. Selecciona el texto a mano.');
+      });
+    });
+  });
+
+  /* En pantallas grandes el chat queda a la derecha sin tapar el texto: se abre solo.
+     En el celular ocuparía toda la pantalla, así que ahí se abre con el botón. */
+  window.addEventListener('load', function () {
+    var grande = window.matchMedia && window.matchMedia('(min-width: 1024px) and (min-height: 640px)').matches;
+    if (!grande) return;
+    setTimeout(function () {
+      if (window.khiyaAgent && typeof window.khiyaAgent.open === 'function') window.khiyaAgent.open();
+    }, 500);
+  });
+})();
+</script>
+</body>
+</html>
